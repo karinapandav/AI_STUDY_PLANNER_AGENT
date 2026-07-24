@@ -20,13 +20,7 @@ An AI-powered study planner built using **n8n**, **Google Gemini**, and **Google
 
 ## Current Workflow
 
-Chat Trigger
-↓
-AI Agent
-↓
-Google Gemini
-↓
-Google Sheets
+Chat Trigger --> AI Agent --> Google Gemini --> Google Sheets
 
 ## Project Status
 
