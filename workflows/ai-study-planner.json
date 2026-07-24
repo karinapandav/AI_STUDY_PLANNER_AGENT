@@ -1,1 +1,386 @@
-
+{
+  "name": "study planner",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        448
+      ],
+      "id": "5e40789d-530c-46e2-9d22-1dd9715e3a6b",
+      "name": "When chat message received",
+      "webhookId": "2dc6f868-c1f3-4bc1-a0e7-d635b344bba1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.1-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        176,
+        544
+      ],
+      "id": "11f1adff-88c0-40c1-ad60-5ed971e19d14",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "wUtxsLVA6hLqfJzJ",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "notes": "You are an expert study planner. Create an optimized study schedule based on the user's available time, weak subjects, upcoming exams, and revision needs. Prioritize weaker subjects while ensuring all subjects are covered."
+    },
+    {
+      "parameters": {
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        288,
+        336
+      ],
+      "id": "4db5e776-9031-465a-b3c2-d4f7481ef70a",
+      "name": "AI Agent",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "notes": "You are an AI Study Planner.\n\nReturn ONLY valid JSON.\n\n{\n  \"subject\": \"\",\n  \"topic\": \"\",\n  \"date\": \"\",\n  \"start_time\": \"\",\n  \"end_time\": \"\",\n  \"duration\": \"\",\n  \"priority\": \"\",\n  \"status\": \"\"\n}\n\nDo not return markdown.\nDo not return explanations.\nReturn only the JSON object."
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        336,
+        544
+      ],
+      "id": "d9bc7df5-c02e-4f70-aca2-10a2057b96a4",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1sfv_rZRcsNz0SNRRo4Q4r21JPDSuuc-ijeXZhL9EX6Q",
+          "mode": "list",
+          "cachedResultName": "AI STUDY PLANNER",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sfv_rZRcsNz0SNRRo4Q4r21JPDSuuc-ijeXZhL9EX6Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "output"
+          ],
+          "schema": [
+            {
+              "id": "output",
+              "displayName": "output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "subject",
+              "displayName": "subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "topic",
+              "displayName": "topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "start_time",
+              "displayName": "start_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "end_time",
+              "displayName": "end_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "duration",
+              "displayName": "duration",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "task_type",
+              "displayName": "task_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        912,
+        448
+      ],
+      "id": "f737fdaa-dac1-43d7-9e96-adffa813b737",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "nSFCytuez8ODLoS7",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        736
+      ],
+      "id": "b1dc2e4d-8e90-49a6-b7fc-4a6ca7a5419c",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "wUtxsLVA6hLqfJzJ",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "notes": "Generate a personalized study plan.\n\nReturn ONLY valid JSON that matches the provided schema.\nDo not use markdown.\nDo not include explanations."
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"study_plan\": [\n    {\n      \"subject\": \"Mathematics\",\n      \"topic\": \"Differential Equations\",\n      \"date\": \"25-07-2026\",\n      \"start_time\": \"09:00\",\n      \"end_time\": \"11:00\",\n      \"duration\": \"2 hours\",\n      \"priority\": \"High\",\n      \"task_type\": \"Lecture\",\n      \"status\": \"Pending\",\n      \"notes\": \"Complete Chapter 4 exercises\"\n    },\n    {\n      \"subject\": \"Physics\",\n      \"topic\": \"Optics\",\n      \"date\": \"25-07-2026\",\n      \"start_time\": \"11:30\",\n      \"end_time\": \"13:00\",\n      \"duration\": \"1.5 hours\",\n      \"priority\": \"Medium\",\n      \"task_type\": \"Practice\",\n      \"status\": \"Pending\",\n      \"notes\": \"Solve PYQs\"\n    }\n  ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        528,
+        544
+      ],
+      "id": "42ac23a8-9b10-4045-b573-57fba8c7f1ea",
+      "name": "Structured Output Parser",
+      "notes": "Generate a personalized study plan.\n\nReturn ONLY valid JSON that matches the provided schema.\nDo not use markdown.\nDo not include explanations."
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        272,
+        736
+      ],
+      "id": "24d052a4-821b-4f2f-a65e-a3ea4f8c21ea",
+      "name": "Auto-fixing Output Parser"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.study_plan",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        688,
+        448
+      ],
+      "id": "7469db59-ec67-4abc-94e4-e45cb1e5f7ac",
+      "name": "Split Out"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          },
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "6b8cea88-7984-4501-b92b-25fc94157a6c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2ddca90e5f1237bac2d7bdb6cc672beabbea4349f12469705dc7d0d079dccb19"
+  },
+  "nodeGroups": [],
+  "id": "LS1ea7TPKtcrXWHp",
+  "tags": []
+}
