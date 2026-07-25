@@ -9,7 +9,7 @@
       "typeVersion": 1.4,
       "position": [
         0,
-        448
+        336
       ],
       "id": "5e40789d-530c-46e2-9d22-1dd9715e3a6b",
       "name": "When chat message received",
@@ -23,8 +23,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        176,
-        544
+        224,
+        560
       ],
       "id": "11f1adff-88c0-40c1-ad60-5ed971e19d14",
       "name": "Google Gemini Chat Model",
@@ -34,7 +34,7 @@
           "name": "Google Gemini(PaLM) Api account"
         }
       },
-      "notes": "You are an expert study planner. Create an optimized study schedule based on the user's available time, weak subjects, upcoming exams, and revision needs. Prioritize weaker subjects while ensuring all subjects are covered."
+      "notes": "You are an intelligent AI Study Planner.\n\nYour task is to create a realistic, personalized study schedule based on the user's goals and constraints.\n\nToday's date is {{ $now.toISODate() }}.\n\n## User Information\nThe user may provide:\n- Exam name\n- Exam date\n- Subjects\n- Weak subjects\n- Strong subjects\n- Daily study hours\n- Preferred study timings\n- Number of study days\n- Any additional preferences\n\nIf some information is missing, make reasonable assumptions instead of asking follow-up questions.\n\n## Planning Rules\n\n1. Start planning from today's date unless the user specifies another start date.\n2. Never generate dates in the past.\n3. Prioritize weak subjects.\n4. Allocate more time to difficult subjects.\n5. Balance study and revision sessions.\n6. Keep individual sessions between 30 and 180 minutes.\n7. Include a 15-minute break after every 90 minutes of study.\n8. Avoid overlapping study sessions.\n9. Respect the user's available study hours.\n10. Generate a realistic schedule.\n11. Use ISO date format: YYYY-MM-DD.\n12. Use 24-hour time format (HH:mm).\n13. Ensure the end time is always later than the start time on the same day.\n14. Do not create study sessions that extend past 23:59.\n15. If the user does not specify an exam date, create a 7-day study plan starting from today.\n\n## Output Rules\n\nReturn ONLY valid JSON.\n\nDo NOT include:\n- Markdown\n- Code fences\n- Explanations\n- Introductory text\n- Bullet points\n\nThe response must exactly follow this structure:\n\n{\n  \"output\": {\n    \"study_plan\": [\n      {\n        \"subject\": \"Financial Statement Analysis\",\n        \"topic\": \"Revenue Recognition\",\n        \"date\": \"2026-07-25\",\n        \"start_time\": \"18:00\",\n        \"end_time\": \"20:00\",\n        \"duration_minutes\": 120,\n        \"priority\": \"High\",\n        \"task_type\": \"Study\",\n        \"status\": \"Pending\",\n        \"notes\": \"Practice 20 questions on Revenue Recognition.\"\n      }\n    ]\n  }\n}\n\nRequirements:\n- duration_minutes must be an integer.\n- status must always be \"Pending\".\n- priority must be one of: High, Medium, Low.\n- task_type must be one of: Study, Revision, Practice, Mock Test.\n- The first character of the response must be {\n- The last character of the response must be }\n- Return only the JSON object and nothing else."
     },
     {
       "parameters": {
@@ -51,15 +51,15 @@
       "name": "AI Agent",
       "alwaysOutputData": false,
       "retryOnFail": true,
-      "notes": "You are an AI Study Planner.\n\nReturn ONLY valid JSON.\n\n{\n  \"subject\": \"\",\n  \"topic\": \"\",\n  \"date\": \"\",\n  \"start_time\": \"\",\n  \"end_time\": \"\",\n  \"duration\": \"\",\n  \"priority\": \"\",\n  \"status\": \"\"\n}\n\nDo not return markdown.\nDo not return explanations.\nReturn only the JSON object."
+      "notes": "You are an AI Study Planner.\n\nReturn ONLY valid JSON.\n\n{\n  \"subject\": \"\",\n  \"topic\": \"\",\n  \"date\": \"\",\n  \"start_time\": \"\",\n  \"end_time\": \"\",\n  \"duration\": \"\",\n  \"priority\": \"\",\n  \"status\": \"\"\n}\n\nDo not return markdown.\nDo not return explanations.\nReturn only the JSON object.\nIf the user provides enough information, generate a complete study plan.\n\nIf information is missing, make reasonable assumptions instead of returning \"Information Request\".\n\nAlways return a study_plan array.\n\nNever return placeholder data.\n\nNever return example dates.\n\nAlways use future dates relative to the user's exam."
     },
     {
       "parameters": {},
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
       "position": [
-        336,
-        544
+        352,
+        560
       ],
       "id": "d9bc7df5-c02e-4f70-aca2-10a2057b96a4",
       "name": "Simple Memory"
@@ -205,8 +205,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        912,
-        448
+        1136,
+        336
       ],
       "id": "f737fdaa-dac1-43d7-9e96-adffa813b737",
       "name": "Append row in sheet",
@@ -219,50 +219,17 @@
     },
     {
       "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1.1,
-      "position": [
-        16,
-        736
-      ],
-      "id": "b1dc2e4d-8e90-49a6-b7fc-4a6ca7a5419c",
-      "name": "Google Gemini Chat Model1",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "wUtxsLVA6hLqfJzJ",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      },
-      "notes": "Generate a personalized study plan.\n\nReturn ONLY valid JSON that matches the provided schema.\nDo not use markdown.\nDo not include explanations."
-    },
-    {
-      "parameters": {
-        "jsonSchemaExample": "{\n  \"study_plan\": [\n    {\n      \"subject\": \"Mathematics\",\n      \"topic\": \"Differential Equations\",\n      \"date\": \"25-07-2026\",\n      \"start_time\": \"09:00\",\n      \"end_time\": \"11:00\",\n      \"duration\": \"2 hours\",\n      \"priority\": \"High\",\n      \"task_type\": \"Lecture\",\n      \"status\": \"Pending\",\n      \"notes\": \"Complete Chapter 4 exercises\"\n    },\n    {\n      \"subject\": \"Physics\",\n      \"topic\": \"Optics\",\n      \"date\": \"25-07-2026\",\n      \"start_time\": \"11:30\",\n      \"end_time\": \"13:00\",\n      \"duration\": \"1.5 hours\",\n      \"priority\": \"Medium\",\n      \"task_type\": \"Practice\",\n      \"status\": \"Pending\",\n      \"notes\": \"Solve PYQs\"\n    }\n  ]\n}"
+        "jsonSchemaExample": "{\n  \"output\": {\n    \"study_plan\": [\n      {\n        \"subject\": \"Financial Statement Analysis\",\n        \"topic\": \"Revenue Recognition\",\n        \"date\": \"2026-07-25\",\n        \"start_time\": \"18:00\",\n        \"end_time\": \"20:00\",\n        \"duration_minutes\": 120,\n        \"priority\": \"High\",\n        \"task_type\": \"Study\",\n        \"status\": \"Pending\",\n        \"notes\": \"Complete readings and solve 20 practice questions.\"\n      },\n      {\n        \"subject\": \"Ethics\",\n        \"topic\": \"Code of Ethics\",\n        \"date\": \"2026-07-26\",\n        \"start_time\": \"18:00\",\n        \"end_time\": \"19:30\",\n        \"duration_minutes\": 90,\n        \"priority\": \"Medium\",\n        \"task_type\": \"Revision\",\n        \"status\": \"Pending\",\n        \"notes\": \"Revise Standards I to VII and attempt practice questions.\"\n      }\n    ]\n  }\n}"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        528,
-        544
+        480,
+        560
       ],
       "id": "42ac23a8-9b10-4045-b573-57fba8c7f1ea",
       "name": "Structured Output Parser",
-      "notes": "Generate a personalized study plan.\n\nReturn ONLY valid JSON that matches the provided schema.\nDo not use markdown.\nDo not include explanations."
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
-      "typeVersion": 1,
-      "position": [
-        272,
-        736
-      ],
-      "id": "24d052a4-821b-4f2f-a65e-a3ea4f8c21ea",
-      "name": "Auto-fixing Output Parser"
+      "notes": "You are an intelligent AI Study Planner.\n\nYour task is to create a realistic, personalized study schedule based on the user's goals and constraints.\n\nToday's date is {{ $now.toISODate() }}.\n\n## User Information\nThe user may provide:\n- Exam name\n- Exam date\n- Subjects\n- Weak subjects\n- Strong subjects\n- Daily study hours\n- Preferred study timings\n- Number of study days\n- Any additional preferences\n\nIf some information is missing, make reasonable assumptions instead of asking follow-up questions.\n\n## Planning Rules\n\n1. Start planning from today's date unless the user specifies another start date.\n2. Never generate dates in the past.\n3. Prioritize weak subjects.\n4. Allocate more time to difficult subjects.\n5. Balance study and revision sessions.\n6. Keep individual sessions between 30 and 180 minutes.\n7. Include a 15-minute break after every 90 minutes of study.\n8. Avoid overlapping study sessions.\n9. Respect the user's available study hours.\n10. Generate a realistic schedule.\n11. Use ISO date format: YYYY-MM-DD.\n12. Use 24-hour time format (HH:mm).\n13. Ensure the end time is always later than the start time on the same day.\n14. Do not create study sessions that extend past 23:59.\n15. If the user does not specify an exam date, create a 7-day study plan starting from today.\n\n## Output Rules\n\nReturn ONLY valid JSON.\n\nDo NOT include:\n- Markdown\n- Code fences\n- Explanations\n- Introductory text\n- Bullet points\n\nThe response must exactly follow this structure:\n\n{\n  \"output\": {\n    \"study_plan\": [\n      {\n        \"subject\": \"Financial Statement Analysis\",\n        \"topic\": \"Revenue Recognition\",\n        \"date\": \"2026-07-25\",\n        \"start_time\": \"18:00\",\n        \"end_time\": \"20:00\",\n        \"duration_minutes\": 120,\n        \"priority\": \"High\",\n        \"task_type\": \"Study\",\n        \"status\": \"Pending\",\n        \"notes\": \"Practice 20 questions on Revenue Recognition.\"\n      }\n    ]\n  }\n}\n\nRequirements:\n- duration_minutes must be an integer.\n- status must always be \"Pending\".\n- priority must be one of: High, Medium, Low.\n- task_type must be one of: Study, Revision, Practice, Mock Test.\n- The first character of the response must be {\n- The last character of the response must be }\n- Return only the JSON object and nothing else."
     },
     {
       "parameters": {
@@ -273,10 +240,40 @@
       "typeVersion": 1,
       "position": [
         688,
-        448
+        336
       ],
       "id": "7469db59-ec67-4abc-94e4-e45cb1e5f7ac",
-      "name": "Split Out"
+      "name": "Split Out",
+      "notes": "FOLLOW THIS OUTPUT EXAMPLE:\n{\n  \"study_plan\": [\n    {\n      \"subject\": \"Mathematics\",\n      \"topic\": \"Calculus Foundations\",\n      \"date\": \"26-07-2026\",\n      \"start_time\": \"18:00\",\n      \"end_time\": \"19:30\",\n      \"duration_minutes\": 90,\n      \"priority\": \"High\",\n      \"task_type\": \"Study\",\n      \"status\": \"Pending\",\n      \"notes\": \"Focus on understanding derivatives and practice 15 problems.\"\n    },\n    {\n      \"subject\": \"Physics\",\n      \"topic\": \"Newton's Laws\",\n      \"date\": \"26-07-2026\",\n      \"start_time\": \"20:00\",\n      \"end_time\": \"21:00\",\n      \"duration_minutes\": 60,\n      \"priority\": \"Medium\",\n      \"task_type\": \"Revision\",\n      \"status\": \"Pending\",\n      \"notes\": \"Revise concepts and solve previous year questions.\"\n    }\n  ]\n}"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "karinapandav1911@gmail.com",
+          "mode": "list",
+          "cachedResultName": "karinapandav1911@gmail.com"
+        },
+        "additionalFields": {
+          "description": "={{ $json.priority }}\n{{ $json.task_type }}\n{{ $json.status }}\n{{ $json.notes }}",
+          "summary": "={{ $json.subject }} - {{ $json.topic }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        912,
+        336
+      ],
+      "id": "597563a3-e69c-4d74-bde6-d60facdb6bd4",
+      "name": "Create an event",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "BovATaRRRgesahoh",
+          "name": "Google Calendar account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -325,27 +322,11 @@
         ]
       ]
     },
-    "Google Gemini Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Auto-fixing Output Parser",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Structured Output Parser": {
       "ai_outputParser": [
         [
           {
             "node": "AI Agent",
-            "type": "ai_outputParser",
-            "index": 0
-          },
-          {
-            "node": "Auto-fixing Output Parser",
             "type": "ai_outputParser",
             "index": 0
           }
@@ -356,7 +337,7 @@
       "main": [
         [
           {
-            "node": "Append row in sheet",
+            "node": "Create an event",
             "type": "main",
             "index": 0
           }
@@ -367,6 +348,17 @@
       "main": [
         []
       ]
+    },
+    "Create an event": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -375,7 +367,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "6b8cea88-7984-4501-b92b-25fc94157a6c",
+  "versionId": "7cde50fd-e773-46ef-b303-75499d929ba6",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "2ddca90e5f1237bac2d7bdb6cc672beabbea4349f12469705dc7d0d079dccb19"
