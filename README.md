@@ -1,39 +1,96 @@
 # AI Study Planner Agent
 
-An AI-powered study planner built using **n8n**, **Google Gemini**, and **Google Sheets**.
+An AI-powered study planner that generates personalized study schedules using **Google Gemini**, automatically stores them in **Google Sheets**, and schedules study sessions in **Google Calendar** through **n8n** workflows.
 
-## Features
+---
 
-- Generates personalized study plans
-- Prioritizes weak subjects
-- Chat-based interaction
-- Saves study plans to Google Sheets
-- Uses Google Gemini for intelligent planning
+## 🚀 Features
 
-## Tech Stack
+- 🤖 AI-powered personalized study plan generation
+- 🧠 Google Gemini integration
+- 💬 Conversational AI Agent with memory
+- 📋 Structured JSON output using Output Parser
+- 📊 Automatic logging to Google Sheets
+- 📅 Automatic Google Calendar event creation
+- 🔄 Split study plans into individual tasks
+- ⚡ End-to-end workflow automation with n8n
+
+---
+
+## 🛠️ Tech Stack
 
 - n8n
 - Google Gemini
-- Google Sheets
+- Google Sheets API
+- Google Calendar API
 - AI Agent
+- Structured Output Parser
 - Simple Memory
 
-## Current Workflow
+---
 
-Chat Trigger --> AI Agent --> Google Gemini --> Google Sheets
+## 📂 Workflow Overview
 
-## Project Status
+```
+Chat Trigger
+      │
+      ▼
+AI Agent
+      │
+      ▼
+Google Gemini
+      │
+      ▼
+Structured Output Parser
+      │
+      ▼
+Split Out
+     ├────────► Google Sheets
+     └────────► Google Calendar
+```
 
-MVP Completed
+---
 
-### Upcoming Features
+## 📌 Current Status
 
-- Google Calendar integration
+### ✅ Milestone 1 – AI Study Planner MVP
+- Chat-based AI study planner
+- Google Gemini integration
+- Structured JSON output
+- Google Sheets integration
+
+### ✅ Milestone 2 – Google Calendar Integration
+- Automatic creation of study sessions in Google Calendar
+- Personalized scheduling based on AI-generated study plans
+
+---
+
+## 🚧 Upcoming Features
+
+- Intelligent conflict detection
+- Adaptive study plan rescheduling
 - Email reminders
-- Progress tracking
-- Adaptive rescheduling
-- Weekly analytics
+- Telegram / WhatsApp notifications
+- Weekly progress reports
+- Study analytics dashboard
+- PDF study plan export
+- Deployment and live demo
 
-## Author
+---
 
-Karina Pandav
+## 📁 Repository Structure
+
+```
+ai-study-planner-agent/
+│
+├── README.md
+├── workflows/
+│   └── ai-study-planner.json
+└── screenshots
+```
+
+---
+
+## 👨‍💻 Author
+
+**Karina Pandav**
