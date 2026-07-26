@@ -1,10 +1,10 @@
-# AI Study Planner Agent
+# 📚 AI Study Planner Agent
 
-An AI-powered study planner that generates personalized study schedules using **Google Gemini**, automatically stores them in **Google Sheets**, and schedules study sessions in **Google Calendar** through **n8n** workflows.
+An AI-powered Study Planner built using **n8n**, **Google Gemini**, **Google Sheets**, and **Google Calendar**. The assistant generates personalized study schedules, automatically logs them to Google Sheets, schedules them in Google Calendar, and intelligently reschedules study sessions through natural language.
 
 ---
 
-## 🚀 Features
+# 🚀 Features
 
 - 🤖 AI-powered personalized study plan generation
 - 🧠 Google Gemini integration
@@ -12,12 +12,13 @@ An AI-powered study planner that generates personalized study schedules using **
 - 📋 Structured JSON output using Output Parser
 - 📊 Automatic logging to Google Sheets
 - 📅 Automatic Google Calendar event creation
-- 🔄 Split study plans into individual tasks
-- ⚡ End-to-end workflow automation with n8n
+- 🔄 AI-powered study plan rescheduling
+- 🎯 Intent-based workflow routing
+- ⚡ End-to-end workflow automation using n8n
 
 ---
 
-## 🛠️ Tech Stack
+# 🛠️ Tech Stack
 
 - n8n
 - Google Gemini
@@ -29,13 +30,18 @@ An AI-powered study planner that generates personalized study schedules using **
 
 ---
 
-## 📂 Workflow Overview
+# 📂 Workflow Overview
 
-```
+## Create Study Plan
+
+```text
 Chat Trigger
       │
       ▼
-AI Agent
+Intent Analyzer
+      │
+      ▼
+Create Plan Agent
       │
       ▼
 Google Gemini
@@ -49,48 +55,117 @@ Split Out
      └────────► Google Calendar
 ```
 
+## Reschedule Study Plan
+
+```text
+Chat Trigger
+      │
+      ▼
+Intent Analyzer
+      │
+      ▼
+Read Study Sessions
+      │
+      ▼
+Aggregate Sessions
+      │
+      ▼
+AI Rescheduler
+      │
+      ▼
+Update Google Sheets
+      │
+      ▼
+Update Google Calendar
+```
+
 ---
 
-## 📌 Current Status
+# 📌 Current Status
 
-### ✅ Milestone 1 – AI Study Planner MVP
-- Chat-based AI study planner
+## ✅ Milestone 1 – AI Study Planner MVP
+
+- AI-powered study schedule generation
 - Google Gemini integration
 - Structured JSON output
 - Google Sheets integration
 
-### ✅ Milestone 2 – Google Calendar Integration
-- Automatic creation of study sessions in Google Calendar
-- Personalized scheduling based on AI-generated study plans
+## ✅ Milestone 2 – Google Calendar Integration
+
+- Automatic creation of study sessions
+- Calendar synchronization
+- Personalized scheduling
+
+## 🚧 Milestone 3 – Intelligent Rescheduling *(In Progress)*
+
+- Intent-based routing
+- Aggregate existing study sessions
+- AI-powered study session identification
+- Automatic Sheet updates
+- Automatic Calendar updates
 
 ---
 
-## 🚧 Upcoming Features
+# 💬 Example Commands
 
-- Intelligent conflict detection
-- Adaptive study plan rescheduling
-- Email reminders
-- Telegram / WhatsApp notifications
-- Weekly progress reports
-- Study analytics dashboard
-- PDF study plan export
-- Deployment and live demo
-
----
-
-## 📁 Repository Structure
+### Create a Study Plan
 
 ```
+Generate a weekly timetable for Data Structures.
+```
+
+### Reschedule a Session
+
+```
+Shift my Ethics study session to Friday evening.
+```
+
+# 📁 Repository Structure
+
+```text
 ai-study-planner-agent/
 │
 ├── README.md
 ├── workflows/
-│   └── ai-study-planner.json
-└── screenshots
+│   ├── create-study-plan.json
+│   └── reschedule-study-plan.json
+│
+├── screenshots/
+└── assets/
 ```
 
 ---
 
-## 👨‍💻 Author
+# 🚀 Future Improvements
+
+- Smart conflict detection
+- Automatic workload balancing
+- Daily study reminders
+- Email notifications
+- WhatsApp / Telegram integration
+- Weekly progress reports
+- Study analytics dashboard
+- PDF study plan export
+- Voice-based study planner
+- Live deployment
+
+---
+
+# 🎯 Learning Outcomes
+
+This project demonstrates:
+
+- AI Workflow Automation
+- Prompt Engineering
+- Google API Integration
+- Workflow Automation with n8n
+- Structured AI Outputs
+- Event Synchronization
+- AI-powered Scheduling
+- Low-Code AI Development
+
+---
+
+# 👨‍💻 Author
 
 **Karina Pandav**
