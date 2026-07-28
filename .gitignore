@@ -1,0 +1,27 @@
+# Environment variables
+.env
+.env.*
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# n8n local data
+.n8n/
+
+# Build folders
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
