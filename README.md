@@ -1,171 +1,314 @@
-# 📚 AI Study Planner Agent
+# 🎓 AI Study Planner Agent
 
-An AI-powered Study Planner built using **n8n**, **Google Gemini**, **Google Sheets**, and **Google Calendar**. The assistant generates personalized study schedules, automatically logs them to Google Sheets, schedules them in Google Calendar, and intelligently reschedules study sessions through natural language.
+An AI-powered Study Planner built using **n8n**, **Google Gemini/Groq**, **Google Sheets**, and **Google Calendar**. The assistant generates personalized study schedules, stores them in Google Sheets, creates Google Calendar events, and intelligently reschedules study sessions using natural language.
 
----
-
-# 🚀 Features
-
-- 🤖 AI-powered personalized study plan generation
-- 🧠 Google Gemini integration
-- 💬 Conversational AI Agent with memory
-- 📋 Structured JSON output using Output Parser
-- 📊 Automatic logging to Google Sheets
-- 📅 Automatic Google Calendar event creation
-- 🔄 AI-powered study plan rescheduling
-- 🎯 Intent-based workflow routing
-- ⚡ End-to-end workflow automation using n8n
+This project demonstrates how AI agents can automate real-world productivity workflows through conversational interfaces and workflow automation.
 
 ---
 
-# 🛠️ Tech Stack
+# ✨ Features
+
+## 📅 AI Study Plan Generation
+- Generate personalized study plans based on exam details
+- Automatically divide syllabus into multiple study sessions
+- Prioritize topics based on importance
+- Produce structured JSON outputs for downstream automation
+
+---
+
+## 🤖 Conversational AI Agent
+- Chat-based interaction
+- Understands natural language requests
+- Supports multiple study-related commands
+- Maintains conversation context
+
+Example:
+
+> "Create a study plan for my DBMS exam."
+
+---
+
+## 🎯 AI Intent Classification
+
+Automatically classifies user requests into:
+
+- Create Study Plan
+- Reschedule Study Session
+
+This enables a single chatbot to intelligently route requests to different workflows.
+
+---
+
+## 🔄 Intelligent Study Session Rescheduler
+
+Users can modify their study plans using natural language.
+
+Examples:
+
+- Reschedule my Calculus session.
+- Move tomorrow's DBMS session to Friday.
+- Shift my Mathematics session to 2 PM.
+
+The AI automatically:
+
+- Reads existing study sessions
+- Identifies the correct session
+- Generates the updated schedule
+- Updates Google Sheets
+- Synchronizes Google Calendar
+
+---
+
+## 📊 Google Sheets Integration
+
+Automatically maintains study data.
+
+### Plans Sheet
+
+Stores:
+
+- Plan ID
+- Exam Name
+- Start Date
+- Exam Date
+- Created Timestamp
+
+### Sessions Sheet
+
+Stores:
+
+- Plan ID
+- Date
+- Start Time
+- End Time
+- Subject
+- Topic
+- Priority
+- Status
+- Calendar Event ID
+
+---
+
+## 📅 Google Calendar Integration
+
+Automatically:
+
+- Creates calendar events
+- Updates events after rescheduling
+- Keeps study sessions synchronized
+
+---
+
+## 📋 Structured AI Outputs
+
+Uses Structured Output Parser to guarantee valid JSON responses.
+
+
+# 🛠 Tech Stack
+
+### Workflow Automation
 
 - n8n
-- Google Gemini
+
+### AI
+
+- Google Gemini *(or Groq GPT-OSS Models)*
+
+### Google Services
+
 - Google Sheets API
 - Google Calendar API
+- Google OAuth2
+
+### AI Components
+
 - AI Agent
+- Intent Classifier
 - Structured Output Parser
 - Simple Memory
 
 ---
 
-# 📂 Workflow Overview
+# 🏗 Workflow Architecture
 
 ## Create Study Plan
 
 ```text
-Chat Trigger
-      │
-      ▼
-Intent Analyzer
-      │
-      ▼
-Create Plan Agent
-      │
-      ▼
-Google Gemini
-      │
-      ▼
-Structured Output Parser
-      │
-      ▼
-Split Out
-     ├────────► Google Sheets
-     └────────► Google Calendar
-```
-
-## Reschedule Study Plan
-
-```text
-Chat Trigger
-      │
-      ▼
-Intent Analyzer
-      │
-      ▼
-Read Study Sessions
-      │
-      ▼
-Aggregate Sessions
-      │
-      ▼
-AI Rescheduler
-      │
-      ▼
-Update Google Sheets
-      │
-      ▼
-Update Google Calendar
+                    User
+                      │
+                      ▼
+                Chat Trigger
+                      │
+                      ▼
+             Intent Classifier
+                      │
+                      ▼
+             AI Study Planner
+                      │
+                      ▼
+         Structured Output Parser
+                      │
+            ┌─────────┴─────────┐
+            ▼                   ▼
+      Google Sheets      Google Calendar
+                      │
+                      ▼
+              Respond to User
 ```
 
 ---
 
-# 📌 Current Status
+## Reschedule Study Plan
 
-## ✅ Milestone 1 – AI Study Planner MVP
-
-- AI-powered study schedule generation
-- Google Gemini integration
-- Structured JSON output
-- Google Sheets integration
-
-## ✅ Milestone 2 – Google Calendar Integration
-
-- Automatic creation of study sessions
-- Calendar synchronization
-- Personalized scheduling
-
-## 🚧 Milestone 3 – Intelligent Rescheduling *(In Progress)*
-
-- Intent-based routing
-- Aggregate existing study sessions
-- AI-powered study session identification
-- Automatic Sheet updates
-- Automatic Calendar updates
+```text
+                    User
+                      │
+                      ▼
+                Chat Trigger
+                      │
+                      ▼
+             Intent Classifier
+                      │
+                      ▼
+             Read Google Sheets
+                      │
+                      ▼
+             Aggregate Sessions
+                      │
+                      ▼
+       Merge Chat + Session Data
+                      │
+                      ▼
+             AI Rescheduler
+                      │
+                      ▼
+         Structured Output Parser
+                      │
+              Update Google Sheets
+                      │
+                      ▼
+            Update Google Calendar
+                      │
+                      ▼
+               Respond to User
+```
 
 ---
 
 # 💬 Example Commands
 
-### Create a Study Plan
+## Create a Study Plan
 
 ```
-Generate a weekly timetable for Data Structures.
+Create a study plan for my Data Structures exam.
 ```
 
-### Reschedule a Session
-
 ```
-Shift my Ethics study session to Friday evening.
-```
-
-# 📁 Repository Structure
-
-```text
-ai-study-planner-agent/
-│
-├── README.md
-├── workflows/
-│   ├── create-study-plan.json
-│   └── reschedule-study-plan.json
-│
-├── screenshots/
-└── assets/
+Generate a weekly timetable for Machine Learning.
 ```
 
 ---
 
-# 🚀 Future Improvements
+## Reschedule a Session
 
-- Smart conflict detection
-- Automatic workload balancing
-- Daily study reminders
-- Email notifications
-- WhatsApp / Telegram integration
-- Weekly progress reports
-- Study analytics dashboard
-- PDF study plan export
-- Voice-based study planner
-- Live deployment
+```
+Move my Calculus study session to tomorrow at 2 PM.
+```
+
+```
+Shift my DBMS revision to Friday evening.
+```
+
+```
+Reschedule my Mathematics session.
+```
 
 ---
 
-# 🎯 Learning Outcomes
+# 🚀 Current Status
 
-This project demonstrates:
+## ✅ Completed
+
+- AI-powered Study Plan Generation
+- Conversational AI Agent
+- Intent Classification
+- Google Sheets Integration
+- Google Calendar Integration
+- Structured Output Parsing
+- AI-powered Study Session Rescheduling
+- Google Sheets Synchronization
+- Google Calendar Synchronization
+- End-to-End Workflow Automation
+
+---
+
+## 🚧 Planned Enhancements
+
+- Unique Session IDs
+- Study Conflict Detection
+- Automatic Workload Balancing
+- Daily Study Reminders
+- Email Notifications
+- WhatsApp / Telegram Integration
+- Weekly Progress Reports
+- Study Analytics Dashboard
+- PDF Study Plan Export
+- Voice-enabled Study Planner
+- Deployment
+
+---
+
+# 📚 Learning Outcomes
+
+This project demonstrates practical experience with:
 
 - AI Workflow Automation
 - Prompt Engineering
-- Google API Integration
-- Workflow Automation with n8n
+- AI Agents
+- Intent Classification
 - Structured AI Outputs
+- Workflow Orchestration using n8n
+- Google Sheets API
+- Google Calendar API
+- Data Aggregation
+- Data Merging
+- JSON Processing
 - Event Synchronization
-- AI-powered Scheduling
+- Conversational AI
 - Low-Code AI Development
+
+---
+
+# 🚀 Future Roadmap
+
+- Multi-user authentication
+- User-specific study plans
+- Adaptive scheduling using AI
+- Exam progress tracking
+- Revision optimization
+- Mobile app integration
+- Dashboard with analytics
+- RAG-powered syllabus understanding
+- Voice assistant support
+
+---
+
+# 🤝 Contributing
+
+Contributions, suggestions, and feature requests are welcome.
+
+Feel free to fork this repository and submit a pull request.
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
 
 ---
 
 # 👨‍💻 Author
 
 **Karina Pandav**
+
+If you found this project helpful, consider giving it a ⭐ on GitHub.
