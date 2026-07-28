@@ -3,7 +3,9 @@
   "nodes": [
     {
       "parameters": {
-        "options": {}
+        "options": {
+          "responseMode": "responseNodes"
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.4,
@@ -13,7 +15,8 @@
       ],
       "id": "5e40789d-530c-46e2-9d22-1dd9715e3a6b",
       "name": "When chat message received",
-      "webhookId": "2dc6f868-c1f3-4bc1-a0e7-d635b344bba1"
+      "webhookId": "2dc6f868-c1f3-4bc1-a0e7-d635b344bba1",
+      "notesInFlow": false
     },
     {
       "parameters": {
@@ -23,8 +26,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        576,
-        672
+        640,
+        608
       ],
       "id": "11f1adff-88c0-40c1-ad60-5ed971e19d14",
       "name": "Google Gemini Chat Model",
@@ -39,7 +42,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "You are an expert AI Study Planner.\n\nYour job is to generate a realistic and personalized study plan based on the user's request.\n\nThe study plan should be practical, balanced, and achievable.\n\nInstructions:\n\n- Understand the user's goal, exam, subjects, available study hours, deadlines, and preferences.\n- Break the syllabus into manageable study sessions.\n- Each study session should focus on one topic only.\n- Create sessions between 30 and 240 minutes unless the user specifies otherwise.\n- Distribute study sessions realistically across the requested dates.\n- Prioritize weaker subjects if the user mentions them.\n- Include revision sessions when appropriate.\n- Include practice/problem-solving sessions where relevant.\n- Avoid overlapping study sessions on the same day.\n- Keep start_time earlier than end_time.\n- Use 24-hour time format (HH:MM).\n- Use dates in YYYY-MM-DD format.\n- Calculate duration_minutes correctly.\n- Set status to \"Pending\".\n- Keep notes short and useful.\n\nGenerate a unique ID for every study session.\n\nThe ID format must be:\n\nST-XXXXXXXX\n\nwhere XXXXXXXX is a unique random or timestamp-based identifier.\n\nReturn ONLY valid JSON.\n\nDo NOT use markdown.\n\nDo NOT explain your answer.\n\nOutput format:\n\n{\n  \"output\": {\n    \"study_plan\": [\n      {\n        \"id\": \"\",\n        \"subject\": \"\",\n        \"topic\": \"\",\n        \"date\": \"\",\n        \"start_time\": \"\",\n        \"end_time\": \"\",\n        \"duration_minutes\": 0,\n        \"priority\": \"\",\n        \"task_type\": \"\",\n        \"status\": \"\",\n        \"notes\": \"\"\n      }\n    ]\n  }\n}",
+        "text": "You are an expert AI Study Planner.\n\nYour job is to generate a realistic and personalized study plan based on the user's request.\n\nThe study plan should be practical, balanced, and achievable.\n\nInstructions:\n\n- Understand the user's goal, exam, subjects, available study hours, deadlines, and preferences.\n- Break the syllabus into manageable study sessions.\n- Each study session should focus on one topic only.\n- Create sessions between 30 and 240 minutes unless the user specifies otherwise.\n- Distribute study sessions realistically across the requested dates.\n- Prioritize weaker subjects if the user mentions them.\n- Include revision sessions when appropriate.\n- Include practice/problem-solving sessions where relevant.\n- Avoid overlapping study sessions on the same day.\n- Keep start_time earlier than end_time.\n- Use 24-hour time format (HH:MM).\n- Use dates in YYYY-MM-DD format.\n- Calculate duration_minutes correctly.\n- Set status to \"Pending\".\n- Keep notes short and useful.\n\nGenerate a unique ID for every study session.\n\nThe ID format must be:\n\nST-XXXXXXXX\n\nwhere XXXXXXXX is a unique random or timestamp-based identifier.\n\nReturn ONLY valid JSON.\n\nDo NOT use markdown.\n\nDo NOT explain your answer.\n\nOutput format:\n\n{\n  \"output\": {\n    \"planId\": \"\",\n    \"examName\": \"\",\n    \"startDate\": \"\",\n    \"examDate\": \"\",\n    \"createdAt\": \"\",\n    \"study_plan\": [\n      {\n        \"id\": \"\",\n        \"subject\": \"\",\n        \"topic\": \"\",\n        \"date\": \"\",\n        \"start_time\": \"\",\n        \"end_time\": \"\",\n        \"duration_minutes\": 0,\n        \"priority\": \"\",\n        \"task_type\": \"\",\n        \"status\": \"\",\n        \"notes\": \"\"\n      }\n    ]\n  }\n}\nBefore the study_plan array, generate plan-level metadata.\n\nInclude:\n\n- planId (format: PLAN-XXXXXXXX)\n- examName\n- startDate\n- examDate\n- createdAt (current date in YYYY-MM-DD format)\n\nThe final JSON must follow this structure exactly.",
         "hasOutputParser": true,
         "options": {}
       },
@@ -52,19 +55,7 @@
       "id": "4db5e776-9031-465a-b3c2-d4f7481ef70a",
       "name": "AI Agent",
       "alwaysOutputData": false,
-      "retryOnFail": true,
-      "notes": "You are an AI Study Planner.\n\nReturn ONLY valid JSON.\n\n{\n  \"subject\": \"\",\n  \"topic\": \"\",\n  \"date\": \"\",\n  \"start_time\": \"\",\n  \"end_time\": \"\",\n  \"duration\": \"\",\n  \"priority\": \"\",\n  \"status\": \"\"\n}\n\nDo not return markdown.\nDo not return explanations.\nReturn only the JSON object.\nIf the user provides enough information, generate a complete study plan.\n\nIf information is missing, make reasonable assumptions instead of returning \"Information Request\".\n\nAlways return a study_plan array.\n\nNever return placeholder data.\n\nNever return example dates.\n\nAlways use future dates relative to the user's exam."
-    },
-    {
-      "parameters": {},
-      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.4,
-      "position": [
-        704,
-        672
-      ],
-      "id": "d9bc7df5-c02e-4f70-aca2-10a2057b96a4",
-      "name": "Simple Memory"
+      "retryOnFail": true
     },
     {
       "parameters": {
@@ -78,19 +69,29 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": "Sheet1",
-          "mode": "name"
+          "value": 1928948108,
+          "mode": "list",
+          "cachedResultName": "Sessions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sfv_rZRcsNz0SNRRo4Q4r21JPDSuuc-ijeXZhL9EX6Q/edit#gid=1928948108"
         },
         "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
-          "matchingColumns": [
-            "output"
-          ],
+          "mappingMode": "defineBelow",
+          "value": {
+            "PlanID": "={{ $json.id }}",
+            "SessionID": "=",
+            "Topic": "={{ $json.topic }}",
+            "Subject": "={{ $json.subject }}",
+            "EndTime": "={{ $json.end_time }}",
+            "StartTime": "={{ $json.start_time }}",
+            "Date": "={{ $json.date }}",
+            "Priority": "={{ $json.priority }}",
+            "Status": "={{ $json.status }}"
+          },
+          "matchingColumns": [],
           "schema": [
             {
-              "id": "output",
-              "displayName": "output",
+              "id": "PlanID",
+              "displayName": "PlanID",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -99,8 +100,8 @@
               "removed": false
             },
             {
-              "id": "subject",
-              "displayName": "subject",
+              "id": "SessionID",
+              "displayName": "SessionID",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -109,8 +110,8 @@
               "removed": false
             },
             {
-              "id": "topic",
-              "displayName": "topic",
+              "id": "Date",
+              "displayName": "Date",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -119,8 +120,8 @@
               "removed": false
             },
             {
-              "id": "date",
-              "displayName": "date",
+              "id": "StartTime",
+              "displayName": "StartTime",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -129,8 +130,8 @@
               "removed": false
             },
             {
-              "id": "start_time",
-              "displayName": "start_time",
+              "id": "EndTime",
+              "displayName": "EndTime",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -139,8 +140,8 @@
               "removed": false
             },
             {
-              "id": "end_time",
-              "displayName": "end_time",
+              "id": "Subject",
+              "displayName": "Subject",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -149,8 +150,8 @@
               "removed": false
             },
             {
-              "id": "duration",
-              "displayName": "duration",
+              "id": "Topic",
+              "displayName": "Topic",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -159,8 +160,8 @@
               "removed": false
             },
             {
-              "id": "priority",
-              "displayName": "priority",
+              "id": "Priority",
+              "displayName": "Priority",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -169,8 +170,8 @@
               "removed": false
             },
             {
-              "id": "task_type",
-              "displayName": "task_type",
+              "id": "Status",
+              "displayName": "Status",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -179,178 +180,8 @@
               "removed": false
             },
             {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "notes",
-              "displayName": "notes",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "id",
-              "displayName": "id",
-              "required": false,
-              "defaultMatch": true,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "start",
-              "displayName": "start",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "end",
-              "displayName": "end",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "creator",
-              "displayName": "creator",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "organizer",
-              "displayName": "organizer",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "created",
-              "displayName": "created",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "updated",
-              "displayName": "updated",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "etag",
-              "displayName": "etag",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "eventType",
-              "displayName": "eventType",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "htmlLink",
-              "displayName": "htmlLink",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "iCalUID",
-              "displayName": "iCalUID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "kind",
-              "displayName": "kind",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "reminders",
-              "displayName": "reminders",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "sequence",
-              "displayName": "sequence",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "summary",
-              "displayName": "summary",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "description",
-              "displayName": "description",
+              "id": "CalendarEventID",
+              "displayName": "CalendarEventID",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -367,7 +198,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1376,
+        1424,
         416
       ],
       "id": "f737fdaa-dac1-43d7-9e96-adffa813b737",
@@ -381,13 +212,13 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n  \"output\": {\n    \"study_plan\": [\n      {\n        \"id\": \"string\",\n        \"subject\": \"string\",\n        \"topic\": \"string\",\n        \"date\": \"string\",\n        \"start_time\": \"string\",\n        \"end_time\": \"string\",\n        \"duration_minutes\": \"number\",\n        \"priority\": \"string\",\n        \"task_type\": \"string\",\n        \"status\": \"string\",\n        \"notes\": \"string\"\n      }\n    ]\n  }\n}"
+        "jsonSchemaExample": "{\n  \"output\": {\n    \"planId\": \"\",\n    \"examName\": \"\",\n    \"startDate\": \"\",\n    \"examDate\": \"\",\n    \"createdAt\": \"\",\n    \"study_plan\": [\n      {\n        \"id\": \"\",\n        \"subject\": \"\",\n        \"topic\": \"\",\n        \"date\": \"\",\n        \"start_time\": \"\",\n        \"end_time\": \"\",\n        \"duration_minutes\": 0,\n        \"priority\": \"\",\n        \"task_type\": \"\",\n        \"status\": \"\",\n        \"notes\": \"\"\n      }\n    ]\n  }\n}"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        832,
-        672
+        784,
+        608
       ],
       "id": "42ac23a8-9b10-4045-b573-57fba8c7f1ea",
       "name": "Structured Output Parser",
@@ -396,17 +227,19 @@
     {
       "parameters": {
         "fieldToSplitOut": "output.study_plan",
-        "options": {}
+        "options": {
+          "includeBinary": false
+        }
       },
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        992,
+        1136,
         416
       ],
       "id": "7469db59-ec67-4abc-94e4-e45cb1e5f7ac",
       "name": "Split Out",
-      "notes": "FOLLOW THIS OUTPUT EXAMPLE:\n{\n  \"study_plan\": [\n    {\n      \"subject\": \"Mathematics\",\n      \"topic\": \"Calculus Foundations\",\n      \"date\": \"26-07-2026\",\n      \"start_time\": \"18:00\",\n      \"end_time\": \"19:30\",\n      \"duration_minutes\": 90,\n      \"priority\": \"High\",\n      \"task_type\": \"Study\",\n      \"status\": \"Pending\",\n      \"notes\": \"Focus on understanding derivatives and practice 15 problems.\"\n    },\n    {\n      \"subject\": \"Physics\",\n      \"topic\": \"Newton's Laws\",\n      \"date\": \"26-07-2026\",\n      \"start_time\": \"20:00\",\n      \"end_time\": \"21:00\",\n      \"duration_minutes\": 60,\n      \"priority\": \"Medium\",\n      \"task_type\": \"Revision\",\n      \"status\": \"Pending\",\n      \"notes\": \"Revise concepts and solve previous year questions.\"\n    }\n  ]\n}"
+      "alwaysOutputData": false
     },
     {
       "parameters": {
@@ -424,8 +257,8 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        1184,
-        416
+        1280,
+        304
       ],
       "id": "597563a3-e69c-4d74-bde6-d60facdb6bd4",
       "name": "Create an event",
@@ -440,8 +273,11 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "You are an intent classifier.\n\nYour ONLY job is to classify the user's message into one of these two intents:\n\ncreate_plan\nreschedule\n\nClassification rules:\n\nReturn create_plan if the user wants to:\n- create a study plan\n- generate a timetable\n- make a schedule\n- plan studies\n- prepare a study plan\n- build a learning schedule\n\nReturn reschedule if the user wants to:\n- reschedule a study session\n- move a study session\n- postpone a study session\n- change the date of a study session\n- change the time of a study session\n- shift a study session\n- update an existing study plan\n- modify an existing study plan\n- I missed my study session\n- I couldn't study yesterday\n- I was busy today\n- move my FSA session\n- move today's session\n- postpone today's study\n\nRules:\n- Return ONLY one word.\n- Output must be exactly:\ncreate_plan\nor\nreschedule\n- Do not explain.\n- Do not use JSON.\n- Do not greet the user.",
-        "options": {}
+        "text": "={{ $json.chatInput }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an intent classifier.\n\nYour ONLY job is to classify the user's message into one of these two intents:\n\ncreate_plan\nreschedule\n\nClassification rules:\n\nReturn create_plan if the user wants to:\n- create a study plan\n- generate a timetable\n- make a schedule\n- plan studies\n- prepare a study plan\n- build a learning schedule\n\nReturn reschedule if the user wants to:\n- reschedule a study session\n- move a study session\n- postpone a study session\n- change the date of a study session\n- change the time of a study session\n- shift a study session\n- update an existing study plan\n- modify an existing study plan\n- I missed my study session\n- I couldn't study yesterday\n- I was busy today\n- move my FSA session\n- move today's session\n- postpone today's study\n\nRules:\n- Return ONLY one word.\n- Output must be exactly:\ncreate_plan\nor\nreschedule\n- Do not explain.\n- Do not use JSON.\n- Do not greet the user."
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
@@ -451,7 +287,7 @@
       ],
       "id": "3ef5393c-fa57-4c83-ac8e-107eba84e977",
       "name": "AI Agent1",
-      "notes": "You are an intent classification assistant.\n\nYour task is to classify the user's message into exactly one of these intents:\n\n- create_plan\n- reschedule\n\nRules:\n- If the user wants to generate a new study plan, return: create_plan\n- If the user wants to move, postpone, or change an existing study plan, return: reschedule\n- Return only one word.\n- Do not explain your answer."
+      "notes": "You are an intent classifier.\n\nYour ONLY job is to classify the user's message into one of these two intents:\n\ncreate_plan\nreschedule\n\nClassification rules:\n\nReturn create_plan if the user wants to:\n- create a study plan\n- generate a timetable\n- make a schedule\n- plan studies\n- prepare a study plan\n- build a learning schedule\n\nReturn reschedule if the user wants to:\n- reschedule a study session\n- move a study session\n- postpone a study session\n- change the date of a study session\n- change the time of a study session\n- shift a study session\n- update an existing study plan\n- modify an existing study plan\n- I missed my study session\n- I couldn't study yesterday\n- I was busy today\n- move my FSA session\n- move today's session\n- postpone today's study\n\nRules:\n- Return ONLY one word.\n- Output must be exactly:\ncreate_plan\nor\nreschedule\n- Do not explain.\n- Do not use JSON.\n- Do not greet the user."
     },
     {
       "parameters": {
@@ -542,21 +378,6 @@
     },
     {
       "parameters": {
-        "respondWith": "text",
-        "responseBody": "✅ Your study plan has been created successfully!\n\n📅 5 study sessions have been added to your Google Calendar.\n📊 The plan has also been saved to Google Sheets.\n\nGood luck with your studies!",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.5,
-      "position": [
-        1568,
-        416
-      ],
-      "id": "dde9cf46-0743-43b2-9d03-e92bff15fe3f",
-      "name": "Respond to Webhook"
-    },
-    {
-      "parameters": {
         "documentId": {
           "__rl": true,
           "value": "1sfv_rZRcsNz0SNRRo4Q4r21JPDSuuc-ijeXZhL9EX6Q",
@@ -566,18 +387,18 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": "gid=0",
+          "value": 1928948108,
           "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sfv_rZRcsNz0SNRRo4Q4r21JPDSuuc-ijeXZhL9EX6Q/edit#gid=0"
+          "cachedResultName": "Sessions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sfv_rZRcsNz0SNRRo4Q4r21JPDSuuc-ijeXZhL9EX6Q/edit#gid=1928948108"
         },
         "options": {}
       },
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        304,
-        80
+        320,
+        64
       ],
       "id": "5fff21a9-00c7-46e7-b50c-b68f2072af5e",
       "name": "Get row(s) in sheet",
@@ -591,18 +412,21 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "You are an AI Study Plan Rescheduler.\n\nYou will receive:\n\n1. The user's rescheduling request.\n2. A JSON array containing all study sessions.\n\nYour task is to:\n\n1. Understand what study session the user wants to reschedule.\n2. Find the SINGLE matching study session.\n3. Determine the updated date and/or time requested by the user.\n4. Return ONLY the information needed to update that session.\n\nRules:\n- Match only ONE study session.\n- If multiple sessions match, choose the closest upcoming one.\n- Keep any field unchanged unless the user explicitly changes it.\n- Preserve the study duration unless the user specifies a new duration.\n- Do NOT create new study sessions.\n- Do NOT modify more than one session.\n- Do NOT explain your reasoning.\n- Do NOT return markdown.\n- Return ONLY valid JSON.\n\nOutput format:\n\n{\n  \"id\": \"\",\n  \"subject\": \"\",\n  \"topic\": \"\",\n  \"old_date\": \"\",\n  \"new_date\": \"\",\n  \"old_start_time\": \"\",\n  \"new_start_time\": \"\",\n  \"old_end_time\": \"\",\n  \"new_end_time\": \"\"\n}\n\nIf no matching study session is found, return:\n\n{\n  \"error\": \"No matching study session found.\"\n}",
-        "options": {}
+        "text": "=User Request:\nReschedule Calculus - Integration study session to tomorrow at 2 PM.\n\nStudy Sessions:\n{{ JSON.stringify($json.data) }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an AI Study Plan Rescheduler.\n\nYou will receive:\n\n1. The user's rescheduling request.\n2. A JSON array containing all study sessions.\n\nYour task is to:\n\n1. Understand what study session the user wants to reschedule.\n2. Find the SINGLE matching study session.\n3. Determine the updated date and/or time requested by the user.\n4. Return ONLY the information needed to update that session.\n\nRules:\n- Match only ONE study session.\n- If multiple sessions match, choose the closest upcoming one.\n- Keep any field unchanged unless the user explicitly changes it.\n- Preserve the study duration unless the user specifies a new duration.\n- Do NOT create new study sessions.\n- Do NOT modify more than one session.\n- Do NOT explain your reasoning.\n- Do NOT return markdown.\n- Return ONLY valid JSON.\n\nOutput format:\n\n{\n  \"id\": \"\",\n  \"subject\": \"\",\n  \"topic\": \"\",\n  \"old_date\": \"\",\n  \"new_date\": \"\",\n  \"old_start_time\": \"\",\n  \"new_start_time\": \"\",\n  \"old_end_time\": \"\",\n  \"new_end_time\": \"\"\n}\n\nIf no matching study session is found, return:\n\n{\n  \"error\": \"No matching study session found.\"\n}"
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        704,
+        1072,
         -48
       ],
       "id": "4d3f0316-1aad-41cb-bbbc-9f9c5f7b9c54",
       "name": "AI Agent2",
-      "retryOnFail": true
+      "retryOnFail": false
     },
     {
       "parameters": {
@@ -611,8 +435,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        608,
-        144
+        528,
+        208
       ],
       "id": "c20713d3-b5df-4e5b-a850-743d2d07a8e7",
       "name": "Google Gemini Chat Model2",
@@ -621,18 +445,17 @@
           "id": "wUtxsLVA6hLqfJzJ",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "notes": "You are an AI study planner assistant.\n\nThe user wants to modify an existing study plan.\n\nYou will receive:\n1. The user's request.\n2. The current study plan from Google Sheets.\n\nDetermine which study session should be changed.\n\nReturn ONLY valid JSON in this format:\n\n{\n  \"topic\": \"\",\n  \"subject\": \"\",\n  \"new_date\": \"\",\n  \"new_start_time\": \"\",\n  \"new_end_time\": \"\"\n}\n\nDo not include explanations or markdown."
+      }
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n  \"subject\": \"string\",\n  \"topic\": \"string\",\n  \"old_date\": \"string\",\n  \"new_date\": \"string\",\n  \"old_start_time\": \"string\",\n  \"new_start_time\": \"string\",\n  \"old_end_time\": \"string\",\n  \"new_end_time\": \"string\"\n}"
+        "jsonSchemaExample": "{\n  \"id\": \"ST-10000002\",\n  \"subject\": \"Mathematics\",\n  \"topic\": \"Calculus - Integration\",\n  \"old_date\": \"2025-05-16\",\n  \"new_date\": \"2025-05-16\",\n  \"old_start_time\": \"09:00\",\n  \"new_start_time\": \"14:00\",\n  \"old_end_time\": \"11:00\",\n  \"new_end_time\": \"16:00\"\n}"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        816,
-        144
+        1232,
+        112
       ],
       "id": "72a47075-6a45-40cc-9b29-0dcae538e1a4",
       "name": "Structured Output Parser1"
@@ -649,20 +472,126 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": "gid=0",
+          "value": 1928948108,
           "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sfv_rZRcsNz0SNRRo4Q4r21JPDSuuc-ijeXZhL9EX6Q/edit#gid=0"
+          "cachedResultName": "Sessions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sfv_rZRcsNz0SNRRo4Q4r21JPDSuuc-ijeXZhL9EX6Q/edit#gid=1928948108"
         },
         "columns": {
-          "mappingMode": "autoMapInputData",
+          "mappingMode": "defineBelow",
           "value": {
-            "row_number": 0
+            "SessionID": "=",
+            "Subject": "={{ $json.output.subject }}",
+            "Topic": "={{ $json.output.topic }}",
+            "PlanID": "={{ $json.output.id }}",
+            "StartTime": "={{ $json.output.new_start_time }}",
+            "EndTime": "={{ $json.output.new_end_time }}",
+            "Date": "={{ $json.output.new_date }}"
           },
           "matchingColumns": [
-            "row_number"
+            "PlanID"
           ],
           "schema": [
+            {
+              "id": "PlanID",
+              "displayName": "PlanID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "SessionID",
+              "displayName": "SessionID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "StartTime",
+              "displayName": "StartTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "EndTime",
+              "displayName": "EndTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CalendarEventID",
+              "displayName": "CalendarEventID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
             {
               "id": "row_number",
               "displayName": "row_number",
@@ -672,7 +601,7 @@
               "type": "number",
               "canBeUsedToMatch": true,
               "readOnly": true,
-              "removed": false
+              "removed": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -683,7 +612,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1024,
+        1392,
         -48
       ],
       "id": "e8abf4d3-07cf-4180-9547-389ff0b62e4e",
@@ -697,32 +626,161 @@
     },
     {
       "parameters": {
-        "respondWith": "text",
-        "responseBody": "=The user's request has been completed successfully.\n\nPrevious date: 2026-07-27\nNew date: 2026-07-28\nSubject: FSA\n\nWrite a short, friendly confirmation message.",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.5,
-      "position": [
-        1296,
-        -48
-      ],
-      "id": "caf6460f-6bd9-46b3-8633-abc667735830",
-      "name": "Respond to Webhook1"
-    },
-    {
-      "parameters": {
-        "aggregate": "aggregateAllItemData",
+        "aggregate": "=aggregateAllItemData",
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {}
+          ]
+        },
         "options": {}
       },
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
         496,
-        -32
+        -48
       ],
       "id": "a605cfdc-0826-4bcf-8e13-eb11a67d5b7b",
       "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1sfv_rZRcsNz0SNRRo4Q4r21JPDSuuc-ijeXZhL9EX6Q",
+          "mode": "list",
+          "cachedResultName": "AI STUDY PLANNER",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sfv_rZRcsNz0SNRRo4Q4r21JPDSuuc-ijeXZhL9EX6Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 186484186,
+          "mode": "list",
+          "cachedResultName": "Plans",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sfv_rZRcsNz0SNRRo4Q4r21JPDSuuc-ijeXZhL9EX6Q/edit#gid=186484186"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "PlanID": "={{ $json.output.planId }}",
+            "ExamName": "={{ $json.output.examName }}",
+            "StartDate": "={{ $json.output.startDate }}",
+            "ExamDate": "={{ $json.output.examDate }}",
+            "CreatedAt ": "={{ $json.output.createdAt }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "PlanID",
+              "displayName": "PlanID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "UserID",
+              "displayName": "UserID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ExamName",
+              "displayName": "ExamName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "StartDate",
+              "displayName": "StartDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ExamDate",
+              "displayName": "ExamDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CreatedAt ",
+              "displayName": "CreatedAt ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        960,
+        288
+      ],
+      "id": "4cfea9a4-f6d9-47a2-837d-664365f7cb40",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "nSFCytuez8ODLoS7",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        128
+      ],
+      "id": "d7e9a404-dab2-42c3-bb88-5aa85a9732c1",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "XVd5iWzDOmzUUOLX",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        704,
+        -48
+      ],
+      "id": "df46f015-cfba-4002-8665-b306b633bf07",
+      "name": "Merge"
     }
   ],
   "pinData": {},
@@ -734,6 +792,11 @@
             "node": "AI Agent1",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
           }
         ]
       ]
@@ -753,19 +816,13 @@
       "main": [
         [
           {
-            "node": "Split Out",
+            "node": "Append row in sheet1",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "Simple Memory": {
-      "ai_memory": [
-        [
+          },
           {
-            "node": "AI Agent",
-            "type": "ai_memory",
+            "node": "Split Out",
+            "type": "main",
             "index": 0
           }
         ]
@@ -786,6 +843,11 @@
       "main": [
         [
           {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
             "node": "Create an event",
             "type": "main",
             "index": 0
@@ -795,13 +857,7 @@
     },
     "Append row in sheet": {
       "main": [
-        [
-          {
-            "node": "Respond to Webhook",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Create an event": {
@@ -868,18 +924,18 @@
     },
     "Google Gemini Chat Model2": {
       "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent2",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Structured Output Parser1": {
       "ai_outputParser": [
-        []
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
       ]
     },
     "AI Agent2": {
@@ -895,16 +951,37 @@
     },
     "Update row in sheet": {
       "main": [
+        []
+      ]
+    },
+    "Aggregate": {
+      "main": [
         [
           {
-            "node": "Respond to Webhook1",
+            "node": "Merge",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Aggregate": {
+    "Append row in sheet1": {
+      "main": [
+        []
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
       "main": [
         [
           {
@@ -922,7 +999,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "b3946556-74c1-46ca-980d-4a3847157803",
+  "versionId": "5fbd255d-3dcf-47d0-b47d-5fec400378f2",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "2ddca90e5f1237bac2d7bdb6cc672beabbea4349f12469705dc7d0d079dccb19"
